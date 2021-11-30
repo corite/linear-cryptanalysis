@@ -1,0 +1,1 @@
+# linear-cryptanalysis [![gradle run](https://github.com/corite/linear-cryptanalysis/actions/workflows/gradle-run.yml/badge.svg)](https://github.com/corite/linear-cryptanalysis/actions/workflows/gradle-run.yml)
