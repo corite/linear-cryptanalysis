@@ -110,6 +110,7 @@ class SubstitutionPermutationNetwork {
             val enc = encrypt(chunk,key)
             pairs[i] = pairs[i] or (enc.toUInt() shl 16)
         }
+        //higher order 16 bits are crypto-text, lower order 16 bits are the corresponding clear-text
         return pairs
     }
 
@@ -126,6 +127,7 @@ class SubstitutionPermutationNetwork {
 
         for (key1 in 0..15){
             for (key2 in 0..15) {
+                //iterating over all possible combinations of key-blocks
                 for (pair in pairs) {
                     val cryptoText = getCryptoText(pair)
                     val clearText = getCleartext(pair)
@@ -152,12 +154,13 @@ class SubstitutionPermutationNetwork {
 
                     if (x5 xor x7 xor x8 xor u46 xor u48 xor u414 xor u416 == 0.toUShort()) {
                         val unifiedKey = (key1 shl 4) or key2
-                        keyFrequency[unifiedKey] = keyFrequency[unifiedKey]!!+1
+                        keyFrequency[unifiedKey] = keyFrequency[unifiedKey]!! + 1
                     }
                 }
             }
         }
          return keyFrequency.entries.map { it.key to abs(it.value - pairs.size/2.0) }.sortedByDescending { it.second }[0].first.toUByte()
+        // get the key-byte with the highest/lowest number of 'hits'
     }
 
     private fun getKthBit(num:UShort, k:Int):UShort {
