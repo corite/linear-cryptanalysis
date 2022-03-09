@@ -12,7 +12,7 @@ fun main() {
     val calcByte = spn.getKeyByte(pairs)
     val keyString = "0".repeat(16-key.toString(2).length)+key.toString(2)
     println("full key: $keyString")
-    println("relevant byte:   ${keyString.subSequence(4,8).toString()+keyString.subSequence(12,16)}")
-    println("calculated byte: ${"0".repeat(8-calcByte.toString(2).length)+calcByte.toString(2)}")
+    println("relevant key-byte:   ${keyString.subSequence(4,8).toString()+keyString.subSequence(12,16)}")
+    println("calculated key-byte: ${"0".repeat(8-calcByte.toString(2).length)+calcByte.toString(2)}")
 
 }

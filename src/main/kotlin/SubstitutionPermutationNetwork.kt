@@ -17,6 +17,7 @@ class SubstitutionPermutationNetwork {
         var result:UShort = 0u
         var mask = "000F".toUShort(16)
         for (i in 0 .. 3) {
+            //substituting block by block
             var block = num and mask
             block = (block.toInt() shr (i*4)).toUShort()
             result = result or (subBlock(block).toInt() shl (i*4)).toUShort()
@@ -29,6 +30,7 @@ class SubstitutionPermutationNetwork {
         var result:UShort = 0u
         var mask = "000F".toUShort(16)
         for (i in 0 .. 3) {
+            //rev-substituting block by block
             var block = num and mask
             block = (block.toInt() shr (i*4)).toUShort()
             result = result or (revSubBlock(block).toInt() shl (i*4)).toUShort()
@@ -55,6 +57,7 @@ class SubstitutionPermutationNetwork {
         if (num and (1 shl 13).toUShort() != 0.toUShort()) result= result or (1 shl 7 ).toUShort()
         if (num and (1 shl 14).toUShort() != 0.toUShort()) result= result or (1 shl 11).toUShort()
         if (num and (1 shl 15).toUShort() != 0.toUShort()) result= result or (1 shl 15).toUShort()
+        //setting every bit according to the definition
 
         return result
     }
@@ -129,11 +132,12 @@ class SubstitutionPermutationNetwork {
             for (key2 in 0..15) {
                 //iterating over all possible combinations of key-blocks
                 for (pair in pairs) {
+                    //iterating over all pairs
                     val cryptoText = getCryptoText(pair)
                     val clearText = getCleartext(pair)
 
-                    val v4a = (key1 xor (cryptoText.toInt() shr 8)).toUShort() and "F".toUShort(16)
-                    val v4b = (key2.toUShort() xor cryptoText) and "F".toUShort(16)
+                    val v4a = (key1 xor (cryptoText.toInt() shr 8)).toUShort() and "F".toUShort(16) //2nd block
+                    val v4b = (key2.toUShort() xor cryptoText) and "F".toUShort(16) // 4th block
                     //the 4-bit blocks with the last key added
 
                     val u4a = revSubBlock(v4a)
@@ -152,9 +156,11 @@ class SubstitutionPermutationNetwork {
                     //the important clear-text bits
 
 
-                    if (x5 xor x7 xor x8 xor u46 xor u48 xor u414 xor u416 == 0.toUShort()) {
+                    if (x5 xor x7 xor x8 xor u46 xor u48 xor u414 xor u416 == 0.toUShort()) { //our approximation
                         val unifiedKey = (key1 shl 4) or key2
+                        //representing the two 16-bit keys as one int again
                         keyFrequency[unifiedKey] = keyFrequency[unifiedKey]!! + 1
+                        //increasing the map value in order to save the result
                     }
                 }
             }
